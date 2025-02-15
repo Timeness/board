@@ -1,7 +1,7 @@
 {
-  "name": "webrtc-oneway-stream",
+  "name": "webrtc-snapshot-stream",
   "version": "1.0.0",
-  "description": "WebRTC one-way stream with Socket.io",
+  "description": "Snapshot streaming with Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
