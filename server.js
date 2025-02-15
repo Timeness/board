@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
 });
 
 // Start server on port 6969
-const PORT = 6669;
+const PORT = 8080;
 http.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
@@ -44,8 +44,8 @@ http.listen(PORT, () => {
 ngrok.connect({
     addr: PORT,
     authtoken: '2t4O9FHI0o8BspbxmHA3MbGZkNn_3UKKckZPzmHqsk1oQWQsn'  // Use your ngrok auth token
-}).then(url => {
-    console.log(`ngrok tunnel is running at: ${url}`);
+}).then(ngrokUrl => {
+    console.log(`ngrok tunnel is running at: ${ngrokUrl}`);
 }).catch(err => {
     console.error("Error while connecting to ngrok:", err);
 });
