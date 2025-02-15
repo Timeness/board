@@ -1,7 +1,6 @@
 {
-  "name": "webrtc-selfie-stream",
+  "name": "webrtc-oneway-stream",
   "version": "1.0.0",
-  "description": "Automatic selfie streaming with Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
