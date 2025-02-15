@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
 });
 
 // Start server on port 6969
-const PORT = 8080;
+const PORT = 8380;
 http.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
