@@ -38,6 +38,8 @@
         const socket = io();
 
         socket.on('selfie', (data) => {
+            console.log("Received image:", data); // Debug log
+
             const img = document.createElement('img');
             img.src = data;
             photosContainer.prepend(img);
