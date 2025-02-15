@@ -1,26 +1,35 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
+// Static files serve karne ke liye
 app.use(express.static('public'));
 
+// Default route for viewer.html
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/viewer.html');
+});
+
+// Route for broadcaster.html
+app.get('/broadcast', (req, res) => {
+    res.sendFile(__dirname + '/public/broadcaster.html');
+});
+
+// Socket.io logic
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    socket.on('offer', (offer) => {
-        socket.broadcast.emit('offer', offer);
+    socket.on('offer', (data) => {
+        socket.broadcast.emit('offer', data);
     });
 
-    socket.on('answer', (answer) => {
-        socket.broadcast.emit('answer', answer);
+    socket.on('answer', (data) => {
+        socket.broadcast.emit('answer', data);
     });
 
-    socket.on('candidate', (candidate) => {
-        socket.broadcast.emit('candidate', candidate);
+    socket.on('ice-candidate', (data) => {
+        socket.broadcast.emit('ice-candidate', data);
     });
 
     socket.on('disconnect', () => {
@@ -29,6 +38,6 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+http.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
