@@ -2,45 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Broadcaster</title>
 </head>
 <body>
     <h1>Broadcaster</h1>
-    <video id="localVideo" autoplay playsinline></video>
+    <video id="video" autoplay playsinline muted></video>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
+        const video = document.getElementById('video');
         const socket = io();
-        const localVideo = document.getElementById('localVideo');
-        const peerConnection = new RTCPeerConnection();
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(stream => {
-                localVideo.srcObject = stream;
-                stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
-            })
-            .catch(err => console.error("Camera access error:", err));
-
-        peerConnection.onicecandidate = event => {
-            if (event.candidate) {
-                socket.emit('candidate', event.candidate);
-            }
-        };
-
-        peerConnection.createOffer()
-            .then(offer => {
-                peerConnection.setLocalDescription(offer);
-                socket.emit('offer', offer);
-            });
-
-        socket.on('answer', answer => {
-            peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+        const peerConnection = new RTCPeerConnection({
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' }
+            ]
         });
 
-        socket.on('candidate', candidate => {
+        async function startBroadcast() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            video.srcObject = stream;
+
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit('ice-candidate', event.candidate);
+                }
+            };
+
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            socket.emit('offer', offer);
+        }
+
+        socket.on('answer', async answer => {
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+        });
+
+        socket.on('ice-candidate', candidate => {
             peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
         });
+
+        startBroadcast();
     </script>
 </body>
 </html>
