@@ -7,7 +7,7 @@ const io = require('socket.io')(http, {
     }
 });
 
-// Static files serve karne ke liye
+// Static files
 app.use(express.static('public'));
 
 // Routes
