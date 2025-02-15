@@ -7,10 +7,10 @@ const io = require('socket.io')(http, {
     }
 });
 
-//
+// Static files
 app.use(express.static('public'));
 
-//
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/viewer.html');
 });
@@ -18,12 +18,12 @@ app.get('/broadcast', (req, res) => {
     res.sendFile(__dirname + '/public/broadcaster.html');
 });
 
-//
+// Socket.io
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
     socket.on('selfie', (data) => {
-        //
+        console.log("Received image from broadcaster:", socket.id);
         socket.broadcast.emit('selfie', data);
     });
 
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
     });
 });
 
-//
+// Start server
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
