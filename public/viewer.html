@@ -2,19 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viewer - Live Selfies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f3f4f6;
+        }
+
+        #photos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px;
+            justify-items: center;
+        }
+
+        #photos img {
+            width: 100%;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            object-fit: cover;
+            transform: scaleX(-1); /* Mirror the selfies */
+        }
+    </style>
 </head>
 <body>
-    <h1>Viewer</h1>
-    <img id="liveImage" alt="Live Stream" style="max-width: 100%; height: auto;">
+    <h1>Live Viewer</h1>
+    <div id="photos"></div>
 
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
-        const liveImage = document.getElementById('liveImage');
+        const photosContainer = document.getElementById('photos');
         const socket = io();
 
-        socket.on('image', (data) => {
-            liveImage.src = data;
+        socket.on('selfie', (data) => {
+            const img = document.createElement('img');
+            img.src = data;
+            photosContainer.prepend(img);
+
+            // Limit to 20 images to avoid memory issues
+            if (photosContainer.children.length > 20) {
+                photosContainer.removeChild(photosContainer.lastChild);
+            }
         });
     </script>
 </body>
