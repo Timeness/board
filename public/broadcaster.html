@@ -27,20 +27,24 @@
 
             peerConnection.onicecandidate = event => {
                 if (event.candidate) {
+                    console.log('Sending ICE candidate:', event.candidate);
                     socket.emit('ice-candidate', event.candidate);
                 }
             };
 
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
+            console.log('Sending Offer:', offer);
             socket.emit('offer', offer);
         }
 
         socket.on('answer', async answer => {
+            console.log('Received Answer:', answer);
             await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
         });
 
         socket.on('ice-candidate', candidate => {
+            console.log('Adding ICE Candidate:', candidate);
             peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
         });
 
