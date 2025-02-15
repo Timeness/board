@@ -1,22 +1,24 @@
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "*"
+    }
+});
 
 // Static files serve karne ke liye
 app.use(express.static('public'));
 
-// Default route for viewer.html
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/viewer.html');
 });
-
-// Route for broadcaster.html
 app.get('/broadcast', (req, res) => {
     res.sendFile(__dirname + '/public/broadcaster.html');
 });
 
-// Socket.io logic
+// Socket.io signaling
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
