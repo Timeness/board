@@ -1,0 +1,24 @@
+{
+  "name": "webrtc-oneway-stream",
+  "version": "1.0.0",
+  "description": "One-way video streaming using WebRTC and Socket.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "engines": {
+    "node": ">=14.x"
+  },
+  "keywords": [
+    "WebRTC",
+    "Socket.io",
+    "Express",
+    "One-way Streaming"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
