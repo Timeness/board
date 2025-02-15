@@ -7,6 +7,7 @@ const io = require('socket.io')(http, {
         methods: ["GET", "POST"]
     }
 });
+const ngrok = require('@ngrok/ngrok');
 
 // Static files
 app.use(express.static('public'));
@@ -33,8 +34,18 @@ io.on('connection', (socket) => {
     });
 });
 
-// Start server on port 3000
+// Start server on port 6969
 const PORT = 6969;
 http.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+// ngrok integration
+ngrok.connect({
+    addr: PORT,
+    authtoken: '2t4O9FHI0o8BspbxmHA3MbGZkNn_3UKKckZPzmHqsk1oQWQsn'  // Use your ngrok auth token
+}).then(url => {
+    console.log(`ngrok tunnel is running at: ${url}`);
+}).catch(err => {
+    console.error("Error while connecting to ngrok:", err);
 });
