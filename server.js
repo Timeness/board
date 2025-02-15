@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
 });
 
 // Start server on port 3000
-const PORT = 3000;
+const PORT = 6969;
 http.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
